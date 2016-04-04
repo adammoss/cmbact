@@ -27,23 +27,23 @@ c subroutine initlval in this code.
      &             xcles,xclet,xclev,
      &             xclbv,xclbt,
      &             akout,trsum
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
       common/seed/iseed
       common/volcom/tkmax     
 
-      open(unit=65,file='cl_tt.d',
+      open(unit=65,file='cl_tt_vd01.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=66,file='cl_te.d',
+      open(unit=66,file='cl_te_vd01.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=67,file='cl_ee.d',
+      open(unit=67,file='cl_ee_vd01.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=70,file='cl_bb.d',
+      open(unit=70,file='cl_bb_vd01.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=80,file='pk_lin.d',
+      open(unit=80,file='pk_lin_vd01.d',
      &	            status='unknown',form='formatted')
 
 c      write(*,*)'hello'
@@ -77,6 +77,9 @@ c Constant effective wiggliness parameter
 
 c vdev is the initial rms string velocity (over all scales)
       vdev=0.65d0
+
+c vdevd is uncertainty on rms string velocity
+      vdevd=0.1d0
       
 c tkmax is the cutoff above which \Theta_D and \Theta_P are set to zero
       tkmax=dble(lmaxout)/2.0d0
@@ -128,7 +131,7 @@ c  tau_init is the earliest conformal time at which one scale model is run
       parameter (lmax0=3300,nnmax=1,lmax=20+lmax0/50)
 	real*8 ztf(nnmax)
 
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
 c
 cLP Output arrays are scalar, vector and tensor temperature anisotropy:
 c   clts, cltv, cltt and the power spectrum: trsum
@@ -540,7 +543,7 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       common/picom/pi,twopi3
 
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
 
       common/evolved/evv(nstep00),evvpr(nstep00)
      &              ,cole(nstep00),colepr(nstep00)
@@ -655,7 +658,7 @@ c this subroutine evaluates the one-scale model equations
      &                     ,tcmb,yhe,nnur,nnunr
       common /genparm/ grhom,grhog,grhor,adotrad,taurst,dtaurec
 
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
 
       tau=x
       a=y(1)     
@@ -695,7 +698,7 @@ c  cr is the only free parameter
       common/seed/iseed
       common/picom/pi,twopi3
       parameter (d0hi=1.0d40,d0lo=1.0d40)
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
 
       common/evolved/evv(nstep00),evvpr(nstep00)
      &              ,cole(nstep00),colepr(nstep00)
@@ -710,7 +713,7 @@ c     &              ,evalf(nstep00),evalfpr(nstep00)
      &             ,ps(ns0,nstep00),pspr(ns0,nstep00)
      &             ,pv(ns0,nstep00),pvpr(ns0,nstep00)
      &             ,pt(ns0,nstep00),ptpr(ns0,nstep00)   
-     &             ,x0k(ns0),tf(ns0),xlden(ns0)
+     &             ,x0k(ns0),tf(ns0),xlden(ns0),vdevr(ns0)
 
 c      write(*,*)iseed	
 
@@ -771,6 +774,9 @@ c  Loop over string segments
 c  each segment gets a random intitial phase
       x0k(m)=2.0d0*pi*ran1(iseed)
 
+c each segment gets a random speed
+      vdevr(m)=ran1(iseed)*vdevd
+
 c  Generate directions at random
       cteta=2.0d0*ran1(iseed)-1.0d0
       phi=2.0d0*pi*ran1(iseed)
@@ -791,8 +797,8 @@ c For each segment, pre-calculate all slowly varying functions of time
       xd3(m,it)=steta*sin(psi)    
       
 c  now the prefactors of S, V and T components
-      vm=evv(it)
-      vm2=evv(it)**2
+      vm=max(min(evv(it)+vdevr(m),0.99),0.01)
+      vm2=vm**2
       ovm2=1.0d0-vm2
 c      alf=evalf(it)
 
@@ -823,7 +829,7 @@ c  for the wave vector k=wk and conformal time tau
 
       common/picom/pi,twopi3
 
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1
 
       common/evolved/evv(nstep00),evvpr(nstep00)
      &              ,cole(nstep00),colepr(nstep00)
@@ -838,7 +844,7 @@ c     &              ,evalf(nstep00),evalfpr(nstep00)
      &             ,ps(ns0,nstep00),pspr(ns0,nstep00)
      &             ,pv(ns0,nstep00),pvpr(ns0,nstep00)
      &             ,pt(ns0,nstep00),ptpr(ns0,nstep00)   
-     &             ,x0k(ns0),tf(ns0),xlden(ns0)
+     &             ,x0k(ns0),tf(ns0),xlden(ns0),vdevr(ns0)
 	 
 
 c  Components of string stress-energy and the derivatives will be calculated 
@@ -878,7 +884,7 @@ c end of cubic spline prep
 
 c find v,l,alpha and their derivatives
 
-      vm=a*evv(klo)+b*evv(khi)
+      vmm=a*evv(klo)+b*evv(khi)
      &    +((a**3-a)*evvpr(klo)+(b**3-b)*evvpr(khi))*(h**2)/6.d0
 
 c      vmdot=(evv(khi)-evv(klo))/h
@@ -910,10 +916,13 @@ c     &       -(3.d0*a**2-1.0d0)*h*cnormpr(klo)/6.0d0
 c     &       +(3.d0*b**2-1.0d0)*h*cnormpr(khi)/6.0d0
 
       
-	  osv=1.0d0/sqrt(1.0d0-vm*vm)
 c	  osvdot=osv**3*vm*vmdot
       
       do 100 m=2,ns1+1
+
+      vm = max(min(vmm + vdevr(m),0.99),0.01)
+
+      osv=1.0d0/sqrt(1.0d0-vm*vm)
 
 c evaluate the splined functions and their derivatives
       xpr3=a*xp3(m,klo)+b*xp3(m,khi)
@@ -1013,7 +1022,7 @@ c      TSdot=TSdot+xps*edot+xpsdot*edenre
       
       subroutine strings_spline(wk,taui,tauf)
       implicit double precision (a-h,o-z)  
-      common/strparam/tau_init,alf,vdev,dksi,ctilde,xlf,ns1    
+      common/strparam/tau_init,alf,vdev,vdevd,dksi,ctilde,xlf,ns1    
       parameter (d0hi=1.0d40,d0lo=1.0d40)
       parameter (nt_fine=5000)
       common/splined_strings/ts_f(nt_fine)
