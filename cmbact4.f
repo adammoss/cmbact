@@ -31,19 +31,19 @@ c subroutine initlval in this code.
       common/seed/iseed
       common/volcom/tkmax     
 
-      open(unit=65,file='cl_tt_vd01.d',
+      open(unit=65,file='cl_tt_vd02.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=66,file='cl_te_vd01.d',
+      open(unit=66,file='cl_te_vd02.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=67,file='cl_ee_vd01.d',
+      open(unit=67,file='cl_ee_vd02.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=70,file='cl_bb_vd01.d',
+      open(unit=70,file='cl_bb_vd02.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=80,file='pk_lin_vd01.d',
+      open(unit=80,file='pk_lin_vd02.d',
      &	            status='unknown',form='formatted')
 
 c      write(*,*)'hello'
@@ -55,7 +55,7 @@ c the string tension (the most important parameter)
 c       gmu=0.0d0
 
 c the number of string network realizations (>100 is good)
-      nexp=2
+      nexp=200
       
 c if string tension is zero, evaluate inflationary spectrum      
       if (gmu.eq.0.0d0) nexp=1
@@ -79,7 +79,7 @@ c vdev is the initial rms string velocity (over all scales)
       vdev=0.65d0
 
 c vdevd is uncertainty on rms string velocity
-      vdevd=0.1d0
+      vdevd=0.2d0
       
 c tkmax is the cutoff above which \Theta_D and \Theta_P are set to zero
       tkmax=dble(lmaxout)/2.0d0
