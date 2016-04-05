@@ -31,19 +31,19 @@ c subroutine initlval in this code.
       common/seed/iseed
       common/volcom/tkmax     
 
-      open(unit=65,file='cl_tt_vd0.d',
+      open(unit=65,file='cl_tt_vd04.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=66,file='cl_te_vd0.d',
+      open(unit=66,file='cl_te_vd04.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=67,file='cl_ee_vd0.d',
+      open(unit=67,file='cl_ee_vd04.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=70,file='cl_bb_vd0.d',
+      open(unit=70,file='cl_bb_vd04.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=80,file='pk_lin_vd0.d',
+      open(unit=80,file='pk_lin_vd04.d',
      &	            status='unknown',form='formatted')
 
 c      write(*,*)'hello'
@@ -79,7 +79,7 @@ c vdev is the initial rms string velocity (over all scales)
       vdev=0.65d0
 
 c vdevd is uncertainty on rms string velocity
-      vdevd=0.0d0
+      vdevd=0.4d0
       
 c tkmax is the cutoff above which \Theta_D and \Theta_P are set to zero
       tkmax=dble(lmaxout)/2.0d0

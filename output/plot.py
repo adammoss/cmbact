@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 plt.subplots_adjust(hspace=0.4)
 
-filenames = ['vd0','vd01', 'vd02']
+filenames = ['vd0','vd01', 'vd02', 'vd04']
 
 tt_data = [np.loadtxt('cl_tt_'+filename+'.d') for filename in filenames]
 ee_data = [np.loadtxt('cl_ee_'+filename+'.d') for filename in filenames]
