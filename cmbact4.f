@@ -31,19 +31,19 @@ c subroutine initlval in this code.
       common/seed/iseed
       common/volcom/tkmax     
 
-      open(unit=65,file='cl_tt_vd02.d',
+      open(unit=65,file='cl_tt_vd0.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=66,file='cl_te_vd02.d',
+      open(unit=66,file='cl_te_vd0.d',
      &	            status='unknown',form='formatted')
      
-      open(unit=67,file='cl_ee_vd02.d',
+      open(unit=67,file='cl_ee_vd0.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=70,file='cl_bb_vd02.d',
+      open(unit=70,file='cl_bb_vd0.d',
      &	            status='unknown',form='formatted')
 
-      open(unit=80,file='pk_lin_vd02.d',
+      open(unit=80,file='pk_lin_vd0.d',
      &	            status='unknown',form='formatted')
 
 c      write(*,*)'hello'
@@ -79,7 +79,7 @@ c vdev is the initial rms string velocity (over all scales)
       vdev=0.65d0
 
 c vdevd is uncertainty on rms string velocity
-      vdevd=0.2d0
+      vdevd=0.0d0
       
 c tkmax is the cutoff above which \Theta_D and \Theta_P are set to zero
       tkmax=dble(lmaxout)/2.0d0
@@ -442,7 +442,7 @@ c   parameters of the one-scale model:
 
       do 100 iexp=1,nexp
       
-c      write(*,*)iexp
+      write(*,*)iexp
 c
 cLP  First generate all random parameters of this particular realization
 c    of the string network.
@@ -774,8 +774,8 @@ c  Loop over string segments
 c  each segment gets a random intitial phase
       x0k(m)=2.0d0*pi*ran1(iseed)
 
-c each segment gets a random speed
-      vdevr(m)=ran1(iseed)*vdevd
+c each segment gets a random speed (boxcar smoothing with width vdevd)
+      vdevr(m)= (0.5 - ran1(iseed))*vdevd
 
 c  Generate directions at random
       cteta=2.0d0*ran1(iseed)-1.0d0
