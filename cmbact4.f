@@ -55,7 +55,7 @@ c the string tension (the most important parameter)
 c       gmu=0.0d0
 
 c the number of string network realizations (>100 is good)
-      nexp=200
+      nexp=1000
       
 c if string tension is zero, evaluate inflationary spectrum      
       if (gmu.eq.0.0d0) nexp=1
@@ -774,8 +774,11 @@ c  Loop over string segments
 c  each segment gets a random intitial phase
       x0k(m)=2.0d0*pi*ran1(iseed)
 
-c each segment gets a random speed (boxcar smoothing with width vdevd)
+c each segment gets a random speed 
+c boxcar smoothing with width vdevd
       vdevr(m)= (0.5 - ran1(iseed))*vdevd
+c Gaussian smoothing with standard deviation vdevd
+c      vdevr(m) = gasdev(iseed)*vdevd
 
 c  Generate directions at random
       cteta=2.0d0*ran1(iseed)-1.0d0

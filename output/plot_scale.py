@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 plt.subplots_adjust(hspace=0.4)
 
 filenames = ['vd0','vd01', 'vd02', 'vd04', 'vg01']
+scale_factor = [1.0, 1.00574, 1.02383, 1.11378, 1.1]
 
 tt_data = [np.loadtxt('cl_tt_'+filename+'.d') for filename in filenames]
 ee_data = [np.loadtxt('cl_ee_'+filename+'.d') for filename in filenames]
@@ -14,9 +15,9 @@ colors = ['black', 'red', 'green', 'blue', 'cyan']
 
 plt.subplot(221)
 for i, d in enumerate(tt_data):
-	plt.semilogx(d[:,0], d[:,1], color=colors[i])
-	plt.semilogx(d[:,0], d[:,2], color=colors[i], linestyle='--')
-	plt.semilogx(d[:,0], d[:,3], color=colors[i], linestyle=':')
+	plt.semilogx(d[:,0], d[:,1]/scale_factor[i], color=colors[i])
+	plt.semilogx(d[:,0], d[:,2]/scale_factor[i], color=colors[i], linestyle='--')
+	plt.semilogx(d[:,0], d[:,3]/scale_factor[i], color=colors[i], linestyle=':')
 	plt.title('TT')
 	plt.xlabel(r'$\ell$')
 	plt.ylabel(r'$D_{\ell}$')
@@ -24,19 +25,18 @@ for i, d in enumerate(tt_data):
 
 plt.subplot(222)
 for i, d in enumerate(ee_data):
-	plt.semilogx(d[:,0], d[:,1], color=colors[i])
-	plt.semilogx(d[:,0], d[:,2], color=colors[i], linestyle='--')
-	plt.semilogx(d[:,0], d[:,3], color=colors[i], linestyle=':')
+	plt.semilogx(d[:,0], d[:,1]/scale_factor[i], color=colors[i])
+	plt.semilogx(d[:,0], d[:,2]/scale_factor[i], color=colors[i], linestyle='--')
+	plt.semilogx(d[:,0], d[:,3]/scale_factor[i], color=colors[i], linestyle=':')
 	plt.title('EE')
 	plt.xlabel(r'$\ell$')
 	plt.ylabel(r'$D_{\ell}$')
-	#plt.ylim([0,0.3])
 	plt.grid(True)
 
 plt.subplot(223)
 for i, d in enumerate(bb_data):
-	plt.semilogx(d[:,0], d[:,1], color=colors[i], linestyle='--')
-	plt.semilogx(d[:,0], d[:,2], color=colors[i], linestyle=':')
+	plt.semilogx(d[:,0], d[:,1]/scale_factor[i], color=colors[i], linestyle='--')
+	plt.semilogx(d[:,0], d[:,2]/scale_factor[i], color=colors[i], linestyle=':')
 	plt.title('BB')
 	plt.xlabel(r'$\ell$')
 	plt.ylabel(r'$D_{\ell}$')
@@ -44,6 +44,6 @@ for i, d in enumerate(bb_data):
 
 plt.show()
 
-plt.savefig('cls.pdf', format='pdf')
+plt.savefig('cls_scale.pdf', format='pdf')
 
 plt.close()
