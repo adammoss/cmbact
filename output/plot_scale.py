@@ -42,8 +42,6 @@ for i, d in enumerate(bb_data):
 	plt.ylabel(r'$D_{\ell}$')
 	plt.grid(True)
 
-plt.show()
-
+#plt.show()
 plt.savefig('cls_scale.pdf', format='pdf')
 
-plt.close()
